@@ -19,8 +19,9 @@ contract Conference {  // can be killed, so the owner gets sent the money in the
 		if (numRegistrants >= quota) { 
 			throw; // throw ensures funds will be returned
 		}
-		registrantsPaid[msg.sender] = msg.value;
 		numRegistrants++;
+		registrantsPaid[msg.sender] = msg.value;
+		
 		Deposit(msg.sender, msg.value);
 	}
 
@@ -34,10 +35,11 @@ contract Conference {  // can be killed, so the owner gets sent the money in the
 		if (registrantsPaid[recipient] == amount) { 
 			address myAddress = this;
 			if (myAddress.balance >= amount) { 
-                registrantsPaid[recipient] = 0;
+                		registrantsPaid[recipient] = 0;
+				numRegistrants--;
 				if (!recipient.send(amount)) throw;
 				Refund(recipient, amount);
-				numRegistrants--;
+				
 			}
 		}
 		return;
